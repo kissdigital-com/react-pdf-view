@@ -1,44 +1,76 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# react-pdf-viewer
 
-## Available Scripts
+## Description
 
-In the project directory, you can run:
+PDF viewer component for React apps based on Render Props pattern.
 
-### `npm start`
+## Installation
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Install npm package:
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+`npm install react-pdf-viewer`
 
-### `npm test`
+## Example usage
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```jsx
+<PDFViewer src={pdf} zoomStep={10} minZoom={20}>
+  {({
+    Viewer,
+    onNextPage,
+    onPrevPage,
+    onIncreaseZoom,
+    onDecreaseZoom,
+    onRotateRight,
+    onRotateLeft,
+    getDocumentData,
+  }) => {
+    const {
+      isLoading,
+      currentPage,
+      error,
+      rotationValue,
+      totalPages,
+      zoomValue,
+    } = getDocumentData();
 
-### `npm run build`
+    return (
+      <div>
+        {!isLoading && <Viewer />}
+        <button onClick={onPrevPage}>Prev</button>
+        <button onClick={onNextPage}>Next</button>
+        <button onClick={onDecreaseZoom}>-</button>
+        <button onClick={onIncreaseZoom}>+</button>
+        <button onClick={onRotateLeft}>Rotate left</button>
+        <button onClick={onRotateRight}>Rotate right</button>
+      </div>
+    );
+  }}
+</PDFViewer>
+```
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Documentation
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+PDF viewer share some useful functions via render props pattern:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- `Viewer` - canvas element contains rendered page
+- `onNextPage` - next page handler
+- `onPrevPage` - prev page handler
+- `onDecreaseZoom` - decrease zoom handler
+- `onIncreaseZoom` - increase zoom handler
+- `onRotateLeft` - rotate left handler
+- `onRotateRight` - rotate right handler
+- `getDocumentData` - function which returns some additional data about PDF file and renderer state
+  - isLoading - loading state
+  - currentPage - current page
+  - error - error messages
+  - rotationValue - rotation value
+  - totalPages - total pages value
+  - zoomValue - zoom value
 
-### `npm run eject`
+## About KISS digital
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+KISS digital is a digital agency located in Kraków, Poland. We provide creative, strategic and technical development of websites and mobile applications.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Contributors
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+@kpowroznik
