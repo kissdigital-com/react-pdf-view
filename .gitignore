@@ -24,3 +24,4 @@ yarn-error.log*
 
 src/sample.pdf
 /lib
+/public
