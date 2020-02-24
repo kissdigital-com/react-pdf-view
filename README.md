@@ -1,5 +1,7 @@
 # react-pdf-viewer
 
+[![NPM version](https://badge.fury.io/js/react-pdf-view.svg)](http://badge.fury.io/js/react-pdf-view)
+
 ## Description
 
 PDF viewer component for React apps based on Render Props pattern.
