@@ -2,7 +2,7 @@
   "name": "react-pdf-view",
   "version": "0.1.0",
   "main": "lib/index.js",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.1",
