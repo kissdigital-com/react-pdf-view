@@ -1,6 +1,9 @@
 import React from 'react';
 
-import pdf, {
+import {
+  version,
+  GlobalWorkerOptions,
+  getDocument,
   PDFDocumentProxy,
   PDFPageProxy,
   PDFPageViewport,
@@ -8,13 +11,11 @@ import pdf, {
   PDFRenderParams,
 } from 'pdfjs-dist';
 
-import pdfWorker from 'pdfjs-dist/build/pdf.worker.entry';
-
-pdf.GlobalWorkerOptions.workerSrc = pdfWorker;
+GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${version}/pdf.worker.js`;
 
 type State = {
   readonly loading: boolean;
-  readonly pending: number | null;
+  readonly pending: number;
   readonly currentPage: number;
   readonly totalPages: number;
   readonly zoom: number;
@@ -22,7 +23,16 @@ type State = {
   readonly error: string;
 };
 
-type RenderProps = {
+export type SharedValues = {
+  readonly currentPage: number;
+  readonly totalPages: number;
+  readonly zoomValue: number;
+  readonly rotationValue: number;
+  readonly isLoading: boolean;
+  readonly error: string;
+};
+
+export type RenderProps = {
   Viewer: React.FC;
   onNextPage: () => void;
   onPrevPage: () => void;
@@ -33,23 +43,14 @@ type RenderProps = {
   getDocumentData: () => SharedValues;
 };
 
-type SharedValues = {
-  readonly currentPage: number;
-  readonly totalPages: number;
-  readonly zoomValue: number;
-  readonly rotationValue: number;
-  readonly isLoading: boolean;
-  readonly error: string;
-};
-
-type Props = {
+export interface PDFViewerProps extends React.Props<PDFViewer> {
   src: string;
-  zoomStep?: number;
-  minZoom?: number;
+  zoomStep: number;
+  minZoom: number;
   children: (renderProps: RenderProps) => React.ReactNode;
-};
+}
 
-export class PDFViewer extends React.Component<Props, State> {
+export class PDFViewer extends React.Component<PDFViewerProps, State> {
   static defaultProps = {
     minZoom: 20,
     zoomStep: 10,
@@ -90,7 +91,7 @@ export class PDFViewer extends React.Component<Props, State> {
         loading: true,
       });
 
-      await pdf.getDocument(src).promise.then((document: PDFDocumentProxy) => {
+      await getDocument(src).promise.then((document: PDFDocumentProxy) => {
         if (this.pdfFile) {
           this.pdfFile.destroy();
         }
@@ -103,6 +104,9 @@ export class PDFViewer extends React.Component<Props, State> {
       });
 
       try {
+        if (!this.pdfFile) {
+          return;
+        }
         const page: PDFPageProxy = await this.pdfFile.getPage(pageToRender);
 
         const viewport: PDFPageViewport = page.getViewport({
@@ -124,6 +128,10 @@ export class PDFViewer extends React.Component<Props, State> {
             '2d'
           );
 
+          if (!canvasContext) {
+            return;
+          }
+
           const renderContext: PDFRenderParams = {
             canvasContext,
             viewport,
@@ -140,7 +148,7 @@ export class PDFViewer extends React.Component<Props, State> {
               this.renderPage(this.state.pending);
 
               this.setState({
-                pending: null,
+                pending: 0,
               });
             }
           });
