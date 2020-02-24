@@ -8,7 +8,7 @@ PDF viewer component for React apps based on Render Props pattern.
 
 Install npm package:
 
-`npm install react-pdf-viewer`
+`npm install react-pdf-view`
 
 ## Example usage
 
