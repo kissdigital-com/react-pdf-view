@@ -1,4 +1,4 @@
-# react-pdf-viewer
+# react-pdf-view
 
 [![NPM version](https://badge.fury.io/js/react-pdf-view.svg)](http://badge.fury.io/js/react-pdf-view)
 
@@ -75,4 +75,4 @@ KISS digital is a digital agency located in Kraków, Poland. We provide creative
 
 ## Contributors
 
-@kpowroznik
+[@kpowroznik](https://github.com/KPowroznik)
